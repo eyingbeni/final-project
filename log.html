@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workout Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+        header {
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .workout {
+            border-left: 5px solid #2c7be5;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .images img {
+            width: 200px;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>📋 Workout Log</h1>
+</header>
+
+<div class="container">
+    <div id="workoutList"></div>
+
+    <h2>Workout Motivation</h2>
+    <div class="images">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b" alt="Running">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438" alt="Weight Lifting">
+        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07d" alt="Fitness Training">
+    </div>
+
+    <button onclick="goToAddWorkout()">⬅ Back to Add Workout</button>
+</div>
+
+<script>
+const workoutList = document.getElementById("workoutList");
+const workouts = JSON.parse(localStorage.getItem("workouts")) || [];
+
+if(workouts.length === 0){
+    workoutList.innerHTML = "<p>No workouts logged yet.</p>";
+} else {
+    workouts.forEach(workout => {
+        const div = document.createElement("div");
+        div.className = "workout";
+        div.innerHTML = `
+            <strong>${workout.activity}</strong><br>
+            Date: ${workout.date}<br>
+            Duration: ${workout.duration} minutes
+        `;
+        workoutList.appendChild(div);
+    });
+}
+
+function goToAddWorkout() {
+    window.location.href = "add_workout.html";
+}
+</script>
+
+</body>
+</html>

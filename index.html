@@ -2,150 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fitness Tracker</title>
-
+    <title>Add Workout</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            background: #f4f6f8;
             margin: 0;
-            padding: 0;
         }
-
         header {
-            background-color: #28a745;
+            background: #2c7be5;
             color: white;
-            text-align: center;
             padding: 20px;
+            text-align: center;
         }
-
         .container {
-            max-width: 900px;
-            margin: 20px auto;
+            max-width: 600px;
+            margin: 30px auto;
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 8px;
         }
-
-        h2 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        form {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
         input, button {
+            width: 100%;
             padding: 10px;
+            margin: 8px 0;
             font-size: 16px;
         }
-
         button {
-            background-color: #28a745;
+            background: #2c7be5;
             color: white;
             border: none;
-            cursor: pointer;
             border-radius: 5px;
+            cursor: pointer;
         }
-
         button:hover {
-            background-color: #218838;
+            background: #1a5dc9;
         }
-
-        .workout {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-        }
-
-        .workout:last-child {
-            border-bottom: none;
-        }
-
-        .images {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 30px;
-        }
-
-        .images img {
-            width: 250px;
-            border-radius: 10px;
+        .link-btn {
+            background: #28a745;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>🏋️ Fitness Tracker</h1>
-    <p>Log your workouts and track your fitness</p>
+    <h1>🏋️ Add Workout</h1>
 </header>
 
 <div class="container">
-
-    <h2>Add Workout</h2>
-    <form id="workoutForm">
-        <input type="text" id="activity" placeholder="Workout (e.g., Ran 5km, Lifted 100kg)" required>
-        <input type="date" id="date" required>
-        <input type="number" id="duration" placeholder="Duration (minutes)" required>
-        <button type="submit">Add Workout</button>
-    </form>
-
-    <h2>Workout Log</h2>
-    <div id="workoutList"></div>
-
-    <div class="images">
-        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b" alt="Running">
-        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438" alt="Weight Lifting">
-        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07d" alt="Fitness Training">
-    </div>
-
+    <input type="text" id="activity" placeholder="Activity (e.g., Ran 5km)">
+    <input type="date" id="date">
+    <input type="number" id="duration" placeholder="Duration (minutes)">
+    <button onclick="addWorkout()">Add Workout</button>
+    <button class="link-btn" onclick="goToLog()">Go to Workout Log</button>
 </div>
 
 <script>
-    const workoutForm = document.getElementById("workoutForm");
-    const workoutList = document.getElementById("workoutList");
+function addWorkout() {
+    const activity = document.getElementById("activity").value;
+    const date = document.getElementById("date").value;
+    const duration = document.getElementById("duration").value;
 
-    let workouts = [];
-
-    workoutForm.addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        const activity = document.getElementById("activity").value;
-        const date = document.getElementById("date").value;
-        const duration = document.getElementById("duration").value;
-
-        const workout = {
-            activity: activity,
-            date: date,
-            duration: duration
-        };
-
-        workouts.push(workout);
-        displayWorkouts();
-        workoutForm.reset();
-    });
-
-    function displayWorkouts() {
-        workoutList.innerHTML = "";
-
-        workouts.forEach((workout, index) => {
-            const workoutDiv = document.createElement("div");
-            workoutDiv.className = "workout";
-
-            workoutDiv.innerHTML = `
-                <strong>${workout.activity}</strong><br>
-                Date: ${workout.date}<br>
-                Duration: ${workout.duration} minutes
-            `;
-
-            workoutList.appendChild(workoutDiv);
-        });
+    if(!activity || !date || !duration){
+        alert("Please fill all fields!");
+        return;
     }
+
+    // Save workout to localStorage
+    let workouts = JSON.parse(localStorage.getItem("workouts")) || [];
+    workouts.push({activity, date, duration});
+    localStorage.setItem("workouts", JSON.stringify(workouts));
+
+    alert("Workout added!");
+    document.getElementById("activity").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("duration").value = "";
+}
+
+function goToLog() {
+    window.location.href = "workout_log.html";
+}
 </script>
 
 </body>
 </html>
+
