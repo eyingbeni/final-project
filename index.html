@@ -2,89 +2,201 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Workout</title>
+    <title>Fitness Tracker</title> <!-- Changed title here -->
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #f4f6f8;
             margin: 0;
         }
-        header {
-            background: #2c7be5;
+
+        /* APP HEADER / LOGO */
+        .app-header {
+            background: #343a40;
             color: white;
             padding: 20px;
             text-align: center;
         }
+
+        /* NAV BAR */
+        nav {
+            background: #2c7be5;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        nav button {
+            background: white;
+            color: #2c7be5;
+            border: none;
+            padding: 10px 22px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: auto;
+        }
+        nav button:hover {
+            background: #e6ecff;
+        }
+
+        /* PAGE CONTAINER */
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 30px auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
         }
-        input, button {
+
+        /* FORM INPUTS */
+        input {
             width: 100%;
             padding: 10px;
             margin: 8px 0;
             font-size: 16px;
         }
-        button {
+
+        /* FORM BUTTON */
+        .form-btn {
+            width: 100%;
+            padding: 10px;
             background: #2c7be5;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-        button:hover {
-            background: #1a5dc9;
-        }
-        .link-btn {
-            background: #28a745;
+            font-size: 16px;
             margin-top: 10px;
+        }
+
+        /* WORKOUT ITEMS */
+        .workout {
+            border-left: 5px solid #2c7be5;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* MOTIVATION IMAGES */
+        .images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .images img {
+            width: 200px;
+            border-radius: 10px;
+        }
+
+        /* PAGE SWITCHING */
+        .page {
+            display: none;
+        }
+        .active {
+            display: block;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>🏋️ Add Workout</h1>
-</header>
+<!-- LOGO -->
+<div class="app-header">
+    <h1>🏋️ Fitness Tracker</h1> <!-- Changed heading here -->
+</div>
 
-<div class="container">
-    <input type="text" id="activity" placeholder="Activity (e.g., Ran 5km)">
-    <input type="date" id="date">
-    <input type="number" id="duration" placeholder="Duration (minutes)">
-    <button onclick="addWorkout()">Add Workout</button>
-    <button class="link-btn" onclick="goToLog()">Go to Workout Log</button>
+<!-- NAV BAR -->
+<nav>
+    <button type="button" onclick="showPage('addPage')">➕ Add Workout</button>
+    <button type="button" onclick="showPage('logPage')">📋 Workout Log</button>
+</nav>
+
+<!-- ADD WORKOUT PAGE -->
+<div id="addPage" class="page active">
+    <div class="container">
+        <h2>Add Workout</h2>
+        <input type="text" id="activity" placeholder="Activity (e.g., Ran 5km)">
+        <input type="date" id="date">
+        <input type="number" id="duration" placeholder="Duration (minutes)">
+        <button class="form-btn" onclick="addWorkout()">Add Workout</button>
+    </div>
+</div>
+
+<!-- WORKOUT LOG PAGE -->
+<div id="logPage" class="page">
+    <div class="container">
+        <h2>Workout Log</h2>
+
+        <!-- MOTIVATION IMAGES MOVED HERE -->
+        <div class="images">
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b" alt="Running">
+            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438" alt="Weight Lifting">    
+        </div>
+
+        <!-- WORKOUT LIST -->
+        <div id="workoutList"></div>
+    </div>
 </div>
 
 <script>
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+    document.getElementById(pageId).classList.add("active");
+
+    if (pageId === "logPage") {
+        renderWorkouts();
+    }
+}
+
 function addWorkout() {
     const activity = document.getElementById("activity").value;
     const date = document.getElementById("date").value;
     const duration = document.getElementById("duration").value;
 
-    if(!activity || !date || !duration){
+    if (!activity || !date || !duration) {
         alert("Please fill all fields!");
         return;
     }
 
-    // Save workout to localStorage
     let workouts = JSON.parse(localStorage.getItem("workouts")) || [];
-    workouts.push({activity, date, duration});
+    workouts.push({ activity, date, duration });
     localStorage.setItem("workouts", JSON.stringify(workouts));
 
     alert("Workout added!");
+
     document.getElementById("activity").value = "";
     document.getElementById("date").value = "";
     document.getElementById("duration").value = "";
+
+    showPage("logPage"); // switch to log page automatically
 }
 
-function goToLog() {
-    window.location.href = "workout_log.html";
+function renderWorkouts() {
+    const workoutList = document.getElementById("workoutList");
+    const workouts = JSON.parse(localStorage.getItem("workouts")) || [];
+
+    workoutList.innerHTML = "";
+
+    if (workouts.length === 0) {
+        workoutList.innerHTML = "<p>No workouts logged yet.</p>";
+        return;
+    }
+
+    workouts.forEach(workout => {
+        const div = document.createElement("div");
+        div.className = "workout";
+        div.innerHTML = `
+            <strong>${workout.activity}</strong><br>
+            Date: ${workout.date}<br>
+            Duration: ${workout.duration} minutes
+        `;
+        workoutList.appendChild(div);
+    });
 }
 </script>
 
 </body>
 </html>
-
