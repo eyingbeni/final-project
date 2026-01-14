@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness Tracker</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .workout {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .workout:last-child {
+            border-bottom: none;
+        }
+
+        .images {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .images img {
+            width: 250px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏋️ Fitness Tracker</h1>
+    <p>Log your workouts and track your fitness</p>
+</header>
+
+<div class="container">
+
+    <h2>Add Workout</h2>
+    <form id="workoutForm">
+        <input type="text" id="activity" placeholder="Workout (e.g., Ran 5km, Lifted 100kg)" required>
+        <input type="date" id="date" required>
+        <input type="number" id="duration" placeholder="Duration (minutes)" required>
+        <button type="submit">Add Workout</button>
+    </form>
+
+    <h2>Workout Log</h2>
+    <div id="workoutList"></div>
+
+    <div class="images">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b" alt="Running">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438" alt="Weight Lifting">
+        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07d" alt="Fitness Training">
+    </div>
+
+</div>
+
+<script>
+    const workoutForm = document.getElementById("workoutForm");
+    const workoutList = document.getElementById("workoutList");
+
+    let workouts = [];
+
+    workoutForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const activity = document.getElementById("activity").value;
+        const date = document.getElementById("date").value;
+        const duration = document.getElementById("duration").value;
+
+        const workout = {
+            activity: activity,
+            date: date,
+            duration: duration
+        };
+
+        workouts.push(workout);
+        displayWorkouts();
+        workoutForm.reset();
+    });
+
+    function displayWorkouts() {
+        workoutList.innerHTML = "";
+
+        workouts.forEach((workout, index) => {
+            const workoutDiv = document.createElement("div");
+            workoutDiv.className = "workout";
+
+            workoutDiv.innerHTML = `
+                <strong>${workout.activity}</strong><br>
+                Date: ${workout.date}<br>
+                Duration: ${workout.duration} minutes
+            `;
+
+            workoutList.appendChild(workoutDiv);
+        });
+    }
+</script>
+
+</body>
+</html>
